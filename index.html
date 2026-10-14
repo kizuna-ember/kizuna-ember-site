@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- 本公開までは検索エンジンに載せない設定。公開時にこの1行を削除 -->
+<meta name="robots" content="noindex, nofollow">
+<title>KIZUNA EMBER</title>
+<meta name="description" content="KIZUNA EMBER オフィシャルサイト">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F7F6FA;
+    --ink: #1F1D2B;
+    --muted: #6B6878;
+    --line: #E3E0EA;
+    --glow-1: #FFB347;
+    --glow-2: #F2545B;
+    --glow-3: #A13BB8;
+    --link: #B4235A;
+    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    --body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+    --wrap: 1120px;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  img { max-width: 100%; }
+  :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+  .wrap { width: min(var(--wrap), 100% - 48px); margin-inline: auto; }
+
+  /* Header */
+  .site-header {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+    background: rgba(247, 246, 250, .88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .logo { font-family: var(--display); font-weight: 800; font-size: 20px; letter-spacing: .02em; text-decoration: none; }
+  .nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+  .nav a { font-family: var(--display); font-weight: 600; font-size: 15px; text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent; }
+  .nav a:hover { border-color: var(--glow-2); }
+  .menu-btn { display: none; background: none; border: 0; font: 600 15px var(--display); color: var(--ink); padding: 8px; cursor: pointer; }
+
+  /* Slider */
+  .slider { position: relative; overflow: hidden; height: min(78vh, 720px); min-height: 440px; background: var(--ink); }
+  .slide {
+    position: absolute; inset: 0;
+    display: grid; align-items: end; padding-bottom: 104px;
+    background-color: var(--ink); background-size: cover; background-position: center;
+    color: var(--paper);
+    opacity: 0; visibility: hidden;
+    transition: opacity .9s ease, visibility 0s linear .9s;
+  }
+  .slide.is-active { opacity: 1; visibility: visible; transition: opacity .9s ease; }
+  .slide.is-light { background: var(--paper); color: var(--ink); }
+  .slide-photo::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(31, 29, 43, .72), rgba(31, 29, 43, 0) 62%);
+  }
+  .slide .wrap { position: relative; z-index: 1; }
+  .slide-title { font-family: var(--display); font-weight: 800; font-size: clamp(44px, 8vw, 112px); line-height: .9; letter-spacing: -.03em; margin: 0; }
+  .slide-text { margin: 20px 0 0; font-weight: 500; font-size: clamp(15px, 1.8vw, 18px); }
+
+  .slider-ui { position: absolute; z-index: 2; left: 0; right: 0; bottom: 32px; color: var(--paper); }
+  .slider[data-tone="light"] .slider-ui { color: var(--ink); }
+  .slider-ui .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .dots { display: flex; gap: 6px; }
+  .dots button { width: 36px; height: 24px; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; }
+  .dots button::after { content: ""; display: block; height: 3px; background: currentColor; opacity: .35; transition: opacity .3s; }
+  .dots button[aria-current="true"]::after { opacity: 1; }
+  .arrows { display: flex; gap: 10px; }
+  .arrows button {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid currentColor; background: transparent; color: inherit;
+    font-size: 18px; line-height: 1; cursor: pointer;
+  }
+  .arrows button:hover { background: currentColor; }
+  .arrows button:hover span { color: var(--paper); }
+  .slider[data-tone="dark"] .arrows button:hover span { color: var(--ink); }
+
+  .hero-glow {
+    position: absolute; z-index: 0;
+    width: 70vmax; height: 70vmax; right: -22vmax; top: -18vmax;
+    background: radial-gradient(circle at 40% 45%, var(--glow-1) 0%, var(--glow-2) 32%, var(--glow-3) 58%, transparent 72%);
+    filter: blur(40px);
+    opacity: .85;
+    animation: breathe 9s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: .78; }
+    50% { transform: scale(1.06); opacity: .95; }
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  .wordmark {
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(56px, 13vw, 176px);
+    line-height: .86; letter-spacing: -.035em;
+    margin: 0;
+  }
+  .wordmark span { display: block; }
+  .tagline { margin: 28px 0 0; font-size: clamp(16px, 2vw, 20px); font-weight: 500; max-width: 26em; }
+
+  /* Sections */
+  section.block { padding: 96px 0; border-top: 1px solid var(--line); }
+  .block-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 40px; flex-wrap: wrap; }
+  .block-head h2 { font-family: var(--display); font-weight: 800; font-size: clamp(36px, 5vw, 56px); line-height: 1; letter-spacing: -.02em; margin: 0; }
+  .block-head p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  /* News */
+  .news { list-style: none; margin: 0; padding: 0; }
+  .news li { display: grid; grid-template-columns: 120px 1fr; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .news li:first-child { border-top: 1px solid var(--line); }
+  .news time { font-family: var(--display); font-weight: 600; color: var(--muted); }
+  .news .title { margin: 0; }
+
+  /* Coming soon panels */
+  .soon {
+    border: 1px solid var(--line); background: #fff;
+    padding: 56px 40px; display: grid; gap: 8px; max-width: 760px;
+  }
+  .soon strong { font-family: var(--display); font-weight: 800; font-size: 28px; letter-spacing: -.01em; }
+  .soon p { margin: 0; color: var(--muted); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .two-col .soon { max-width: none; }
+
+  /* Company */
+  .company { margin: 0; max-width: 760px; }
+  .company div { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .company div:first-child { border-top: 1px solid var(--line); }
+  .company dt { font-weight: 700; }
+  .company dd { margin: 0; }
+  .company ul { margin: 0; padding-left: 1.2em; }
+
+  /* Contact */
+  .contact p { max-width: 36em; margin: 0 0 28px; }
+  .btn {
+    display: inline-block; text-decoration: none;
+    background: var(--ink); color: var(--paper);
+    font-weight: 700; padding: 16px 36px; border-radius: 999px;
+  }
+  .btn:hover { background: var(--link); }
+
+  /* Footer */
+  .site-footer { border-top: 1px solid var(--line); padding: 48px 0 40px; font-size: 14px; color: var(--muted); }
+  .site-footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .site-footer ul { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+  .site-footer a { text-decoration: none; }
+  .site-footer a:hover { color: var(--ink); }
+
+  @media (max-width: 760px) {
+    .menu-btn { display: block; }
+    .nav { position: absolute; left: 0; right: 0; top: 68px; background: var(--paper); border-bottom: 1px solid var(--line); display: none; }
+    .nav.open { display: block; }
+    .nav ul { flex-direction: column; gap: 0; padding: 8px 24px 16px; }
+    .nav a { display: block; padding: 12px 0; }
+    .slider { height: 72vh; }
+    .slide { padding-bottom: 96px; }
+    .arrows { display: none; }
+    .news li { grid-template-columns: 1fr; gap: 4px; }
+    .two-col { grid-template-columns: 1fr; }
+    .company div { grid-template-columns: 1fr; gap: 4px; }
+    .soon { padding: 40px 24px; }
+    section.block { padding: 72px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-glow { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="#top">KIZUNA EMBER</a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="#news">News</a></li>
+        <li><a href="#release">Release</a></li>
+        <li><a href="#artist">Artist</a></li>
+        <li><a href="#audition">Audition</a></li>
+        <li><a href="#company">Company</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="slider" aria-roledescription="carousel" aria-label="メインビジュアル" data-tone="light">
+
+    <!-- スライド1：ロゴ（写真なし） -->
+    <div class="slide is-light is-active" data-tone="light" aria-roledescription="slide" aria-label="1枚目">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="wrap">
+        <h1 class="wordmark"><span>Kizuna</span><span>Ember</span></h1>
+        <!-- キャッチコピー(仮) -->
+        <p class="tagline">心に灯りつづける音楽を、ここから。</p>
+      </div>
+    </div>
+
+    <!--
+      スライド2・3：写真用の枠
+      images フォルダに slide2.jpg / slide3.jpg を入れると自動で写真に切り替わります。
+      写真がないあいだは色のグラデーションが表示されます。
+      推奨サイズ：横1920×縦1080px、1枚500KB以下。人物は画面中央寄りに。
+      文字が不要なら <div class="wrap">〜</div> を丸ごと削除。
+      スライドを増やすときは、この div をコピーして slide4.jpg などに変更。
+    -->
+    <div class="slide slide-photo" data-tone="dark" aria-roledescription="slide" aria-label="2枚目"
+         style="background-image: url('images/slide2.jpg'), radial-gradient(circle at 78% 28%, #A13BB8 0%, #4A2A6A 35%, #1F1D2B 75%);">
+      <div class="wrap">
+        <p class="slide-title">Artist<br>coming soon</p>
+        <p class="slide-text">所属アーティストは近日発表します。</p>
+      </div>
+    </div>
+
+    <div class="slide slide-photo" data-tone="dark" aria-roledescription="slide" aria-label="3枚目"
+         style="background-image: url('images/slide3.jpg'), radial-gradient(circle at 22% 30%, #FFB347 0%, #F2545B 30%, #5A2240 62%, #1F1D2B 90%);">
+      <div class="wrap">
+        <p class="slide-title">Audition</p>
+        <p class="slide-text">新しい才能との出会いを準備しています。</p>
+      </div>
+    </div>
+
+    <div class="slider-ui">
+      <div class="wrap">
+        <div class="dots" role="group" aria-label="スライドを選ぶ"></div>
+        <div class="arrows">
+          <button type="button" class="prev" aria-label="前のスライド"><span>&larr;</span></button>
+          <button type="button" class="next" aria-label="次のスライド"><span>&rarr;</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="news">
+    <div class="wrap">
+      <div class="block-head"><h2>News</h2><p>お知らせ</p></div>
+      <ul class="news">
+        <!-- ニュースを追加するときは、この li を1つコピーして一番上に貼る -->
+        <li>
+          <time datetime="2026-10-13">2026.10.13</time>
+          <p class="title">オフィシャルサイトを開設しました。</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block" id="release">
+    <div class="wrap">
+      <div class="block-head"><h2>Release</h2><p>リリース情報</p></div>
+      <div class="soon">
+        <strong>Coming soon</strong>
+        <p>リリース情報は決まりしだいお知らせします。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="artist">
+    <div class="wrap">
+      <div class="block-head"><h2>Artist</h2><p>所属アーティスト</p></div>
+      <div class="soon">
+        <strong>Coming soon</strong>
+        <p>所属アーティストは近日発表します。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="audition">
+    <div class="wrap">
+      <div class="block-head"><h2>Audition</h2><p>オーディション・採用</p></div>
+      <div class="two-col">
+        <div class="soon">
+          <strong>Audition</strong>
+          <p>アーティストオーディションの募集要項は準備中です。</p>
+        </div>
+        <div class="soon">
+          <strong>Recruit</strong>
+          <p>スタッフ採用の情報は準備中です。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="company">
+    <div class="wrap">
+      <div class="block-head"><h2>Company</h2><p>会社概要</p></div>
+      <!-- 【要差し替え】正式な会社情報が届いたら書き換え -->
+      <dl class="company">
+        <div><dt>会社名</dt><dd>KIZUNA EMBER株式会社</dd></div>
+        <div><dt>所在地</dt><dd>（確認中）</dd></div>
+        <div><dt>設立</dt><dd>（確認中）</dd></div>
+        <div><dt>代表者</dt><dd>（確認中）</dd></div>
+        <div><dt>事業内容</dt><dd>
+          <ul>
+            <li>音楽制作・レーベル運営</li>
+            <li>アーティストマネジメント</li>
+            <li>イベント・公演の企画運営</li>
+            <li>グッズの企画・販売</li>
+          </ul>
+        </dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="block contact" id="contact">
+    <div class="wrap">
+      <div class="block-head"><h2>Contact</h2><p>お問い合わせ</p></div>
+      <p>出演・取材のご依頼、お取引に関するお問い合わせはこちらから受け付けます。ファンレターやプレゼントのお問い合わせにはお答えできません。</p>
+      <!-- 【要差し替え】Googleフォーム等のURLが決まったら href="#" を置き換え -->
+      <a class="btn" href="#">お問い合わせフォームを開く</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <ul>
+      <li><a href="#company">Company</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <!-- プライバシーポリシーページを作ったらリンク先を変更 -->
+      <li><a href="#">Privacy Policy</a></li>
+    </ul>
+    <small>&copy; 2026 KIZUNA EMBER</small>
+  </div>
+</footer>
+
+<script>
+  const btn = document.querySelector('.menu-btn');
+  const nav = document.getElementById('nav');
+  btn.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+    btn.textContent = open ? 'Close' : 'Menu';
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.textContent = 'Menu';
+  }));
+
+  // スライダー（6秒ごとに自動切り替え）
+  (() => {
+    const slider = document.querySelector('.slider');
+    const slides = [...slider.querySelectorAll('.slide')];
+    const dotsWrap = slider.querySelector('.dots');
+    const INTERVAL = 6000;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let current = 0;
+    let timer = null;
+
+    const dots = slides.map((_, n) => {
+      const d = document.createElement('button');
+      d.type = 'button';
+      d.setAttribute('aria-label', (n + 1) + '枚目を表示');
+      d.addEventListener('click', () => { go(n); restart(); });
+      dotsWrap.appendChild(d);
+      return d;
+    });
+
+    function go(n) {
+      slides[current].classList.remove('is-active');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('is-active');
+      slider.dataset.tone = slides[current].dataset.tone;
+      dots.forEach((d, k) => d.setAttribute('aria-current', k === current ? 'true' : 'false'));
+    }
+    function start() { if (!reduceMotion && slides.length > 1) timer = setInterval(() => go(current + 1), INTERVAL); }
+    function stop() { clearInterval(timer); }
+    function restart() { stop(); start(); }
+
+    slider.querySelector('.prev').addEventListener('click', () => { go(current - 1); restart(); });
+    slider.querySelector('.next').addEventListener('click', () => { go(current + 1); restart(); });
+    slider.addEventListener('mouseenter', stop);
+    slider.addEventListener('mouseleave', start);
+    slider.addEventListener('focusin', stop);
+    slider.addEventListener('focusout', start);
+
+    let x0 = null;
+    slider.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+    slider.addEventListener('touchend', e => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) { go(current + (dx < 0 ? 1 : -1)); restart(); }
+      x0 = null;
+    });
+
+    go(0);
+    start();
+  })();
+</script>
+</body>
+</html>
